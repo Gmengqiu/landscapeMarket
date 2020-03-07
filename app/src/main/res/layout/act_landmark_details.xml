@@ -105,34 +105,42 @@
     </ScrollView>
 
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginTop="5dp"
-        android:orientation="vertical">
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentTop="true"
+            android:background="@color/gray3" />
+
 
         <EditText
             android:id="@+id/et_you_comment"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/shape_item_gray"
+            android:layout_toLeftOf="@+id/tv_add_comment"
+            android:background="@null"
             android:hint="请在这里输入您的评论"
-            android:paddingLeft="20dp" />
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp" />
 
         <TextView
             android:id="@+id/tv_add_comment"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="5dp"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
             android:background="@color/main_color"
             android:gravity="center"
             android:text="评论"
             android:textColor="@color/white"
             android:textSize="16sp" />
 
-    </LinearLayout>
+
+    </RelativeLayout>
 
 
 </LinearLayout>

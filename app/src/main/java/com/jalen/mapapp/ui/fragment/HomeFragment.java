@@ -1,6 +1,8 @@
 package com.jalen.mapapp.ui.fragment;
 
 import android.content.Intent;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -32,6 +34,7 @@ public class HomeFragment extends BaseFragment implements AdapterView.OnItemClic
     private ListView listView;
     private MainDataAdapter adapter;
     private EditText etQuery;
+    private List<LandmarkBean> allData = null;
 
     @Override
     public int getLayoutId() {
@@ -43,70 +46,75 @@ public class HomeFragment extends BaseFragment implements AdapterView.OnItemClic
         listView = view.findViewById(R.id.lv_show);
         etQuery = view.findViewById(R.id.et_query);
         listView.setOnItemClickListener(this);
-
-        BmobQuery<LandmarkBean> bmobQuery = new BmobQuery<>();
-        bmobQuery.findObjects(new FindListener<LandmarkBean>() {
+        getAllData();
+        //新增文本变化监听处理
+        etQuery.addTextChangedListener(new TextWatcher() {
             @Override
-            public void done(List<LandmarkBean> landmarkBeans, BmobException e) {
-                if (e == null && landmarkBeans.size() > 0) {
-                    //获取数据之后绑定数据
-                    adapter = new MainDataAdapter(getContext(), landmarkBeans);//创建适配器
-                    listView.setAdapter(adapter);
-                } else {
-                    Toast.makeText(getContext(), "查询出错", Toast.LENGTH_SHORT).show();
-                }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
             }
-        });
 
-
-        //顶部查询处理
-        etQuery.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    //如果actionId是搜索的id，则进行下一步的操作
-                    queryData();
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                queryData();
+            }
 
-                }
-                return false;
+            @Override
+            public void afterTextChanged(Editable editable) {
+
             }
         });
     }
 
 
-    //查询数据
-    private void queryData() {
-        final String keyword = etQuery.getText().toString().trim();
-        final List<LandmarkBean> queryData = new ArrayList<>();
+    /**
+     * 获取所有的数据
+     */
+    private void getAllData() {
         //启用模糊查询
         BmobQuery<LandmarkBean> bmobQuery = new BmobQuery<>();
         bmobQuery.findObjects(new FindListener<LandmarkBean>() {
             @Override
             public void done(List<LandmarkBean> landmarkBeans, BmobException e) {
                 if (e == null && landmarkBeans.size() > 0) {
-                    //将landmarkBeans进行过滤处理
-                    for (int i = 0; i < landmarkBeans.size(); i++) {
-                        boolean aBoolean = landmarkBeans.get(i).title.contains(keyword) || landmarkBeans.get(i).note.contains(keyword);//判断这个bean中有没有包含该关键字
-                        if (aBoolean) {
-                            queryData.add(landmarkBeans.get(i));
-                        }
-                    }
-                    if (queryData.size() > 0) {
-                        //获取数据之后绑定数据
-                        Toast.makeText(getContext(), "查询成功", Toast.LENGTH_SHORT).show();
-                        adapter = new MainDataAdapter(getContext(), queryData);//创建适配器
-                        listView.setAdapter(adapter);
-                    } else {
-                        Toast.makeText(getContext(), "没有查询到您要的数据", Toast.LENGTH_SHORT).show();
-                    }
-
+                    allData = landmarkBeans;
+                    updateAdapter(landmarkBeans);
                 } else {
                     Toast.makeText(getContext(), "查询出错", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+
+    /**
+     * 更新适配器显示的数据
+     *
+     * @param landmarkBeans
+     */
+    private void updateAdapter(List<LandmarkBean> landmarkBeans) {
+        if (null != landmarkBeans && landmarkBeans.size() > 0) {
+            adapter = new MainDataAdapter(getContext(), landmarkBeans);//创建适配器
+            listView.setAdapter(adapter);
+            listView.setVisibility(View.VISIBLE);
+        } else {
+            listView.setVisibility(View.GONE);
+        }
+    }
 
 
+    //查询数据
+    private void queryData() {
+        final String keyword = etQuery.getText().toString().trim();
+        List<LandmarkBean> landmarkBeans = new ArrayList<>();
+        //将landmarkBeans进行过滤处理
+        for (int i = 0; i < allData.size(); i++) {
+            LandmarkBean landmarkBean = allData.get(i);
+            boolean aBoolean = landmarkBean.title.contains(keyword) || landmarkBean.note.contains(keyword);//判断这个bean中有没有包含该关键字
+            if (aBoolean) {
+                landmarkBeans.add(landmarkBean);
+            }
+        }
+        updateAdapter(landmarkBeans);
     }
 
 

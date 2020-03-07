@@ -78,7 +78,6 @@ public class LandmarkDetailsActivity extends BaseActivity implements View.OnClic
             public void done(LandmarkBean landmarkBean, BmobException e) {
                 if (e == null) {
                     landmarkBeanDetails = landmarkBean;
-                    showMsg("查询成功");
                     //绑定数据显示页面
                     showPage(landmarkBean);
                 } else {

@@ -52,17 +52,23 @@ public class CommentAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
             viewHolder.time = convertView.findViewById(R.id.tv_time);
             viewHolder.comment = convertView.findViewById(R.id.tv_comment);
+            viewHolder.tvName = convertView.findViewById(R.id.tvName);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.time.setText(list.get(position).getCreatedAt());
-        viewHolder.comment.setText(list.get(position).CommentDetail);
+        CommentBean commentBean = list.get(position);
+        if (null != commentBean) {
+            viewHolder.time.setText(commentBean.getCreatedAt());
+            viewHolder.comment.setText(commentBean.CommentDetail);
+            viewHolder.tvName.setText(commentBean.commentator);
+        }
         return convertView;
     }
 
     static class ViewHolder {
         public TextView time;
         public TextView comment;
+        public TextView tvName;
     }
 }
