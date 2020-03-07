@@ -32,4 +32,9 @@ public class UserBean extends BmobObject {
     public String pwd;
 
 
+    /**
+     * 头像id
+     */
+    public String headId;
+
 }

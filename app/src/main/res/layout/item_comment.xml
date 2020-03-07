@@ -13,35 +13,44 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tv_time"
+        <ImageView
+            android:id="@+id/iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:text="2018-09-19 12:00"
-            android:textColor="@color/text_black"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+            tools:src="@mipmap/splash_jiangnanchun" />
 
         <TextView
             android:id="@+id/tvName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/iv"
+            android:textColor="@color/black_text"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            tools:text="张三" />
+
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:textColor="@color/main_color"
+            android:textColor="@color/text_black"
             android:textSize="14sp"
-            tools:text="张三" />
-    </RelativeLayout>
+            android:textStyle="bold"
+            tools:text="2018-09-19 12:00" />
 
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/tv_comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="这里非常好玩"
+        android:gravity="center_vertical"
+        android:paddingTop="5dp"
         android:textColor="@color/text_gray"
-        android:textSize="14sp" />
-
+        android:textSize="14sp"
+        tools:text="这里非常好玩" />
 </LinearLayout>

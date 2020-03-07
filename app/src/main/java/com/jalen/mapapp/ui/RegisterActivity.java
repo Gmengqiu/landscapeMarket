@@ -1,14 +1,16 @@
 package com.jalen.mapapp.ui;
 
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.jalen.mapapp.R;
 import com.jalen.mapapp.base.BaseActivity;
 import com.jalen.mapapp.bean.UserBean;
+
+import java.util.Random;
 
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
@@ -82,6 +84,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         String address = etAddress.getText().toString().trim();
         String phone = etPhone.getText().toString().trim();
 
+        String[] headList = getResources().getStringArray(R.array.head_list);
+        String headId = headList[new Random().nextInt(headList.length)];
+
         if (TextUtils.isEmpty(name)) {
             showMsg("用户名不能为空");
             return;
@@ -112,7 +117,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             return;
         }
 
-        if (pwd.length() != 11) {
+        if (phone.length() != 11) {
             showMsg("手机号必须是11位");
             return;
         }
@@ -122,11 +127,15 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         userBean.pwd = pwd;
         userBean.phone = phone;
         userBean.sex = sex;
+        userBean.headId = headId;
+        final Intent intent = new Intent();
+        intent.putExtra("user", userBean);
         userBean.save(new SaveListener<String>() {
             @Override
             public void done(String objectId, BmobException e) {
                 if (e == null) {
-                    showMsg("注册成功，请登录");
+                    showMsg("注册成功");
+                    setResult(RESULT_OK, intent);
                     finish();
                 } else {
                     showMsg("创建数据失败：" + e.getMessage());

@@ -8,7 +8,17 @@ import cn.bmob.v3.BmobObject;
 public class CommentBean extends BmobObject {
 
 
-    public String CommentDetail;//内容
+    /**
+     * 内容
+     */
+    public String CommentDetail;
+    /**
+     * 评论人
+     */
     public String commentator;//评论人
+    /**
+     * 头像
+     */
+    public String headId;
 
 }

@@ -20,7 +20,10 @@ import com.jalen.mapapp.adapter.CommentAdapter;
 import com.jalen.mapapp.base.BaseActivity;
 import com.jalen.mapapp.bean.CommentBean;
 import com.jalen.mapapp.bean.LandmarkBean;
+import com.jalen.mapapp.util.AppConstants;
 import com.jalen.mapapp.util.CommonUtil;
+import com.jalen.mapapp.util.SharedPreferencesUtils;
+import com.jalen.mapapp.weight.MyListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +42,7 @@ public class LandmarkDetailsActivity extends BaseActivity implements View.OnClic
     private ImageView ivBack, ivDetails;
     private TextView tvTitle, tvIntroduce, tvAddComment;
     private TextView tvAddress, tvTel;
-    private ListView lvComment;
+    private MyListView lvComment;
     private EditText etYouComment;
     private CommentAdapter commentAdapter;
     private int position;
@@ -199,12 +202,14 @@ public class LandmarkDetailsActivity extends BaseActivity implements View.OnClic
      * 添加评论
      */
     private void addComment() {
+        String userHead = SharedPreferencesUtils.getString(AppConstants.USER_HEAD);
         String commentDetail = etYouComment.getText().toString().trim();
         //获取当前用户
         String commentator = CommonUtil.getCurrentUser();
         CommentBean commentBean = new CommentBean();
         commentBean.commentator = commentator;
         commentBean.CommentDetail = commentDetail;
+        commentBean.headId = userHead;
         List<CommentBean> commentBeanList = new ArrayList<>();
         commentBeanList.add(commentBean);
 

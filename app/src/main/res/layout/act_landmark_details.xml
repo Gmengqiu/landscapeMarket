@@ -92,12 +92,14 @@
                 tools:text="描述：欢乐谷各种刺激玩耍" />
 
 
-            <ListView
+            <com.jalen.mapapp.weight.MyListView
                 android:id="@+id/lv_comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp" />
+                android:layout_marginRight="15dp"
+                android:overScrollMode="never"
+                android:scrollbars="none" />
 
 
         </LinearLayout>
@@ -125,6 +127,7 @@
             android:layout_toLeftOf="@+id/tv_add_comment"
             android:background="@null"
             android:hint="请在这里输入您的评论"
+            android:maxLength="30"
             android:paddingLeft="10dp"
             android:paddingRight="10dp" />
 

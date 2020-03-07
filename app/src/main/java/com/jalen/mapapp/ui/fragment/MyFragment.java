@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jalen.mapapp.R;
@@ -21,7 +22,7 @@ import java.util.Locale;
 public class MyFragment extends BaseFragment {
 
     private TextView tvName, tvPhone, tvAddress, tvExit;
-
+    private ImageView iv;
 
     @Override
     public int getLayoutId() {
@@ -34,6 +35,7 @@ public class MyFragment extends BaseFragment {
         tvPhone = view.findViewById(R.id.tvPhone);
         tvAddress = view.findViewById(R.id.tvAddress);
         tvExit = view.findViewById(R.id.tvExit);
+        iv = view.findViewById(R.id.iv);
     }
 
     @Override
@@ -42,10 +44,13 @@ public class MyFragment extends BaseFragment {
         String name = SharedPreferencesUtils.getString(AppConstants.USER_NAME);
         String address = SharedPreferencesUtils.getString(AppConstants.USER_ADDRESS);
         String phone = SharedPreferencesUtils.getString(AppConstants.USER_PHONE);
+        String userHead = SharedPreferencesUtils.getString(AppConstants.USER_HEAD);
         if (!TextUtils.isEmpty(name)) {
             tvName.setText(name);
             tvAddress.setText(address);
             tvPhone.setText(phone);
+            int mipmap = getResources().getIdentifier(userHead, "mipmap", getActivity().getPackageName());
+            iv.setImageResource(mipmap);
         }
         tvExit.setOnClickListener(new View.OnClickListener() {
             @Override

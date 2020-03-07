@@ -2,32 +2,23 @@ package com.jalen.mapapp.ui;
 
 import android.content.Intent;
 import android.os.Handler;
-import android.support.design.widget.Snackbar;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
 
 import com.jalen.mapapp.R;
 import com.jalen.mapapp.base.BaseActivity;
-import com.jalen.mapapp.bean.CommentBean;
-import com.jalen.mapapp.bean.LandmarkBean;
 import com.jalen.mapapp.bean.UserBean;
 import com.jalen.mapapp.util.AppConstants;
 import com.jalen.mapapp.util.CommonUtil;
 import com.jalen.mapapp.util.SharedPreferencesUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
-import cn.bmob.v3.listener.QueryListener;
-import cn.bmob.v3.listener.SaveListener;
 
 
 /**
@@ -67,7 +58,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             login();
         } else if (v.getId() == R.id.tvRight) {//跳转到注册页面
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, 106);
         }
     }
 
@@ -115,60 +106,24 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         finish();
     }
 
-
-    private void simulateUserData() {
-        UserBean userBean = new UserBean();
-        userBean.address = "北京市海淀区中关村至尊大厦顶楼008室";
-        userBean.name = "测试账号";
-        userBean.phone = "13888888888";
-        userBean.sex = "男";
-        userBean.pwd = "123456";
-        userBean.save(new SaveListener<String>() {
-            @Override
-            public void done(String objectId, BmobException e) {
-                if (e == null) {
-                    showMsg("保存用户数据成功");
-                } else {
-                    showMsg("创建数据失败：" + e.getMessage());
-                }
-            }
-        });
-    }
-
-    private void simulateBaseData() {
-        String[] address_list = getResources().getStringArray(R.array.address_list);
-        String[] desc_list = getResources().getStringArray(R.array.desc_list);
-        String[] img_list = getResources().getStringArray(R.array.img_list);
-        String[] latitude_list = getResources().getStringArray(R.array.latitude_list);
-        String[] longitude_list = getResources().getStringArray(R.array.longitude_list);
-        String[] name_list = getResources().getStringArray(R.array.name_list);
-        String[] note_list = getResources().getStringArray(R.array.note_list);
-        String[] tel_list = getResources().getStringArray(R.array.tel_list);
-
-        List<LandmarkBean> landmarkBeanList = new ArrayList<LandmarkBean>();
-        for (int i = 0; i < address_list.length; i++) {
-            LandmarkBean landmarkBean = new LandmarkBean();
-            landmarkBean.address = address_list[i];
-            landmarkBean.describe = desc_list[i];
-            landmarkBean.imgUrl = img_list[i];
-            landmarkBean.latitude = latitude_list[i];
-            landmarkBean.longitude = longitude_list[i];
-            landmarkBean.title = name_list[i];
-            landmarkBean.note = note_list[i];
-            landmarkBean.tel = tel_list[i];
-            landmarkBeanList.add(landmarkBean);
-
-            landmarkBean.save(new SaveListener<String>() {
-                @Override
-                public void done(String objectId, BmobException e) {
-                    if (e == null) {
-                        showMsg("保存风景数据成功");
-                    } else {
-                        showMsg("创建数据失败：" + e.getMessage());
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == 106) {
+            if (null != data) {
+                final UserBean userBean = (UserBean) data.getSerializableExtra("user");
+                etName.setText(userBean.name);
+                etPwd.setText(userBean.pwd);
+                //延迟1分钟自动登录
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        CommonUtil.login(userBean);
+                        go2Main();
                     }
-                }
-            });
-        }
+                }, 1000);
 
+            }
+        }
     }
 }

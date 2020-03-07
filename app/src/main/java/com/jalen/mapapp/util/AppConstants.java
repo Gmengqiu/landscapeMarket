@@ -10,4 +10,5 @@ public class AppConstants {
     public static final String USER_SEX = "user_sex";
     public static final String USER_ADDRESS = "user_address";
     public static final String USER_PHONE = "user_phone";
+    public static final String USER_HEAD = "user_head";
 }

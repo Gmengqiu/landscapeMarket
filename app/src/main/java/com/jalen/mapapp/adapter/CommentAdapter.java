@@ -5,11 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jalen.mapapp.R;
 import com.jalen.mapapp.bean.CommentBean;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,15 +53,22 @@ public class CommentAdapter extends BaseAdapter {
             viewHolder.time = convertView.findViewById(R.id.tv_time);
             viewHolder.comment = convertView.findViewById(R.id.tv_comment);
             viewHolder.tvName = convertView.findViewById(R.id.tvName);
+            viewHolder.iv = convertView.findViewById(R.id.iv);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         CommentBean commentBean = list.get(position);
         if (null != commentBean) {
-            viewHolder.time.setText(commentBean.getCreatedAt());
-            viewHolder.comment.setText(commentBean.CommentDetail);
-            viewHolder.tvName.setText(commentBean.commentator);
+            try {
+                int mipmap = context.getResources().getIdentifier(commentBean.headId, "mipmap", context.getPackageName());
+                viewHolder.iv.setImageResource(mipmap);
+                viewHolder.time.setText(commentBean.getCreatedAt());
+                viewHolder.tvName.setText(commentBean.commentator);
+                viewHolder.comment.setText(commentBean.CommentDetail);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return convertView;
     }
@@ -70,5 +77,6 @@ public class CommentAdapter extends BaseAdapter {
         public TextView time;
         public TextView comment;
         public TextView tvName;
+        public ImageView iv;
     }
 }

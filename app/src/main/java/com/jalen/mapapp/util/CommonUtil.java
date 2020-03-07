@@ -18,6 +18,7 @@ public class CommonUtil {
         SharedPreferencesUtils.saveString(AppConstants.USER_SEX, userBean.sex);
         SharedPreferencesUtils.saveString(AppConstants.USER_ADDRESS, userBean.address);
         SharedPreferencesUtils.saveString(AppConstants.USER_PHONE, userBean.phone);
+        SharedPreferencesUtils.saveString(AppConstants.USER_HEAD, userBean.headId);
     }
 
     /**
@@ -29,6 +30,7 @@ public class CommonUtil {
         SharedPreferencesUtils.saveString(AppConstants.USER_SEX, "");
         SharedPreferencesUtils.saveString(AppConstants.USER_ADDRESS, "");
         SharedPreferencesUtils.saveString(AppConstants.USER_PHONE, "");
+        SharedPreferencesUtils.saveString(AppConstants.USER_HEAD, "");
     }
 
 
