@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray1"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_height"
+        android:background="@color/main_color">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/item_height"
+            android:layout_centerInParent="true"
+            android:background="@color/main_color"
+            android:gravity="center"
+            android:text="我的"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_big"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/item_height"
+                android:layout_marginTop="6dp"
+                android:background="@color/white">
+
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin_half"
+                    android:gravity="center_vertical"
+                    android:text="账号"
+                    android:textColor="@color/text_gray"
+                    android:textSize="@dimen/text_size_nomal" />
+
+                <TextView
+                    android:id="@+id/tvName"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@+id/tv_name"
+                    android:background="@null"
+                    android:gravity="center_vertical|right"
+                    android:maxLength="16"
+                    android:paddingRight="@dimen/activity_horizontal_margin_half"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/text_size_nomal"
+                    tools:text="姓名" />
+
+
+            </RelativeLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/item_height"
+                android:layout_marginTop="6dp"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin_half"
+                    android:gravity="center_vertical"
+                    android:text="地址:"
+                    android:textColor="@color/text_gray"
+                    android:textSize="@dimen/text_size_nomal" />
+
+                <TextView
+                    android:id="@+id/tvAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:gravity="center_vertical|right"
+                    android:maxLength="30"
+                    android:paddingRight="@dimen/activity_horizontal_margin_half"
+                    android:singleLine="true"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/text_size_nomal"
+                    tools:text="请输入具体地址" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/item_height"
+                android:layout_marginTop="6dp"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin_half"
+                    android:gravity="center_vertical"
+                    android:text="手机号:"
+                    android:textColor="@color/text_gray"
+                    android:textSize="@dimen/text_size_nomal" />
+
+                <TextView
+                    android:id="@+id/tvPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:gravity="center_vertical|right"
+                    android:inputType="phone"
+                    android:maxLength="11"
+                    android:paddingRight="@dimen/activity_horizontal_margin_half"
+                    android:singleLine="true"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/text_size_nomal"
+                    tools:text="请输入手机号" />
+
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/tvExit"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_margin="15dp"
+                android:background="@color/gray4"
+                android:gravity="center"
+                android:text="退出登录"
+                android:textColor="@color/black_text"
+                android:textSize="14sp" />
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

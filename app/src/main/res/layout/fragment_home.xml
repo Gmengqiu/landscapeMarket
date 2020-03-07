@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:background="@color/main_color"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        tools:text="首页" />
+
+
+    <EditText
+        android:id="@+id/et_query"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/shape_query_gray"
+        android:drawableLeft="@mipmap/ic_search_gray"
+        android:drawablePadding="5dp"
+        android:gravity="center_vertical"
+        android:hint="输入关键字"
+        android:imeOptions="actionSearch"
+        android:maxLength="20"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:singleLine="true" />
+
+    <ListView
+        android:id="@+id/lv_show"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@null"
+        android:overScrollMode="never"
+        android:scrollbars="none" />
+
+
+</LinearLayout>
