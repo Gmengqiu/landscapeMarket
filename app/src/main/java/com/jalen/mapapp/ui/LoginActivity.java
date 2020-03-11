@@ -88,17 +88,36 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             @Override
             public void done(List<UserBean> categories, BmobException e) {
                 if (e == null && categories.size() > 0) {
-                    showMsg("登录成功");
-                    UserBean userBean = categories.get(0);
-                    //保存在SP文件中
-                    CommonUtil.login(userBean);
-                    go2Main();
+                    updateLoginUser(name, categories);
                 } else {
                     showMsg("请检查您的用户名和密码");
                 }
             }
         });
     }
+
+    private void updateLoginUser(String name, List<UserBean> categories) {
+        boolean hasUser = false;
+        UserBean userBeanResult = null;
+        for (int i = 0; i < categories.size(); i++) {
+            UserBean userBean = categories.get(i);
+            if (userBean.name.equals(name)) {
+                hasUser = true;
+                userBeanResult = userBean;
+                break;
+            }
+        }
+        if (hasUser) {
+            showMsg("登录成功");
+            //保存在SP文件中
+            CommonUtil.login(userBeanResult);
+            go2Main();
+        } else {
+            showMsg("暂无该用户记录");
+        }
+
+    }
+
 
     private void go2Main() {
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);

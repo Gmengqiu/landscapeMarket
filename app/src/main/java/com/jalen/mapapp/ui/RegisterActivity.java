@@ -10,9 +10,12 @@ import com.jalen.mapapp.R;
 import com.jalen.mapapp.base.BaseActivity;
 import com.jalen.mapapp.bean.UserBean;
 
+import java.util.List;
 import java.util.Random;
 
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
 
 
@@ -79,7 +82,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
      * 注册用户
      */
     private void register() {
-        String name = etName.getText().toString().trim();
+        final String name = etName.getText().toString().trim();
         String pwd = etPwd.getText().toString().trim();
         String address = etAddress.getText().toString().trim();
         String phone = etPhone.getText().toString().trim();
@@ -121,13 +124,40 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             showMsg("手机号必须是11位");
             return;
         }
-        UserBean userBean = new UserBean();
+
+        final UserBean userBean = new UserBean();
         userBean.name = name;
         userBean.address = address;
         userBean.pwd = pwd;
         userBean.phone = phone;
         userBean.sex = sex;
         userBean.headId = headId;
+
+        BmobQuery<UserBean> bmobQuery = new BmobQuery<>();
+        bmobQuery.findObjects(new FindListener<UserBean>() {
+            @Override
+            public void done(List<UserBean> categories, BmobException e) {
+                if (e == null && categories.size() > 0) {
+                    boolean hasUser = false;
+                    for (int i = 0; i < categories.size(); i++) {
+                        UserBean userBean = categories.get(i);
+                        if (userBean.name.equals(name)) {
+                            hasUser = true;
+                            break;
+                        }
+                    }
+                    if (hasUser) {
+                        showMsg("该用户已存在");
+                    } else {
+                        registerUser(userBean);
+                    }
+                } else {
+                    registerUser(userBean);
+                }
+            }
+        });
+
+
         final Intent intent = new Intent();
         intent.putExtra("user", userBean);
         userBean.save(new SaveListener<String>() {
@@ -135,6 +165,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             public void done(String objectId, BmobException e) {
                 if (e == null) {
                     showMsg("注册成功");
+
                     setResult(RESULT_OK, intent);
                     finish();
                 } else {
@@ -143,4 +174,23 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             }
         });
     }
+
+    private void registerUser(UserBean userBean) {
+        final Intent intent = new Intent();
+        intent.putExtra("user", userBean);
+        userBean.save(new SaveListener<String>() {
+            @Override
+            public void done(String objectId, BmobException e) {
+                if (e == null) {
+                    showMsg("注册成功");
+
+                    setResult(RESULT_OK, intent);
+                    finish();
+                } else {
+                    showMsg("创建数据失败：" + e.getMessage());
+                }
+            }
+        });
+    }
+
 }

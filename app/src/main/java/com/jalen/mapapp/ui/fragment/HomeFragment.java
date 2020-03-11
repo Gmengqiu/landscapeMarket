@@ -80,7 +80,7 @@ public class HomeFragment extends BaseFragment implements AdapterView.OnItemClic
                     allData = landmarkBeans;
                     updateAdapter(landmarkBeans);
                 } else {
-                    Toast.makeText(getContext(), "查询出错", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "查询出错:" + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
