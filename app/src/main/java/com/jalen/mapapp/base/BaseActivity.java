@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.jalen.mapapp.util.CocoLocalBroadcastUtil;
@@ -17,8 +19,8 @@ import com.jalen.mapapp.util.CocoLocalBroadcastUtil;
  * 所有Activity界面的基类
  */
 public abstract class BaseActivity extends AppCompatActivity {
+    private InputMethodManager inputMethodManager;
     protected Context context;
-
     private IntentFilter filter;
     private final BroadcastReceiver m_receiver = new BroadcastReceiver() {
         @Override
@@ -105,6 +107,24 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         unregisterLocalBroadCast();
+    }
+
+    /**
+     * 隐藏软键盘
+     */
+    protected void hideSoftInput() {
+        View view = getCurrentFocus();
+        if (view == null) {
+            view = getWindow().getDecorView();
+        }
+        getInputMethodManager().hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    private InputMethodManager getInputMethodManager() {
+        if (inputMethodManager == null) {
+            inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        }
+        return inputMethodManager;
     }
 
 }

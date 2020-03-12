@@ -1,5 +1,7 @@
 package com.jalen.mapapp.bean;
 
+import java.util.List;
+
 import cn.bmob.v3.BmobObject;
 
 /**
@@ -20,5 +22,11 @@ public class CommentBean extends BmobObject {
      * 头像
      */
     public String headId;
+
+
+    /**
+     * 回复列表
+     */
+    public List<ReplyBean> replyBeanList;
 
 }

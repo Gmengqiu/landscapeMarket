@@ -7,11 +7,9 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -88,8 +86,6 @@ public class LandmarkDetailsActivity extends BaseActivity implements View.OnClic
                 }
             }
         });
-
-
     }
 
     /**
@@ -97,41 +93,31 @@ public class LandmarkDetailsActivity extends BaseActivity implements View.OnClic
      *
      * @param landmarkBean
      */
-    private void showPage(LandmarkBean landmarkBean) {
+    private void showPage(final LandmarkBean landmarkBean) {
         tvTitle.setText(landmarkBean.title);
         Glide.with(context).load(landmarkBean.imgUrl).into(ivDetails);
         tvIntroduce.setText(landmarkBean.describe);
         tvAddress.setText("地址:" + landmarkBean.address);
         tvTel.setText("电话:" + landmarkBean.tel);
-        if (null != landmarkBean.commentBeanList && landmarkBean.commentBeanList.size() > 0) {
-            commentAdapter = new CommentAdapter(this, landmarkBean.commentBeanList);
+        final List<CommentBean> commentBeanList = landmarkBean.commentBeanList;
+        if (null != commentBeanList && commentBeanList.size() > 0) {
+            commentAdapter = new CommentAdapter(this, commentBeanList);
             lvComment.setAdapter(commentAdapter);
-            setListViewHeightBasedOnChildren(lvComment);
+            CommonUtil.setListViewHeightBasedOnChildren(lvComment);
+            lvComment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    go2CommentDetail(commentBeanList.get(i));
+                }
+            });
         }
     }
 
-    public void setListViewHeightBasedOnChildren(ListView listView) {
-        // 获取ListView对应的Adapter
-        ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null) {
-            return;
-        }
-        int totalHeight = 0;
-        for (int i = 0, len = listAdapter.getCount(); i < len; i++) {
-            // listAdapter.getCount()返回数据项的数目
-            View listItem = listAdapter.getView(i, null, listView);
-            // 计算子项View 的宽高
-            listItem.measure(0, 0);
-            // 统计所有子项的总高度
-            totalHeight += listItem.getMeasuredHeight();
-        }
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
-        // listView.getDividerHeight()获取子项间分隔符占用的高度
-        // params.height最后得到整个ListView完整显示需要的高度
-        listView.setLayoutParams(params);
+    private void go2CommentDetail(CommentBean commentBean) {
+        Intent intent = new Intent(this, CommentDetailsActivity.class);
+        intent.putExtra("commentBean", commentBean);
+        startActivity(intent);
     }
-
 
     @Override
     public void initEvent() {
@@ -230,6 +216,7 @@ public class LandmarkDetailsActivity extends BaseActivity implements View.OnClic
                             if (e == null) {
                                 showMsg("添加成功");
                                 etYouComment.setText("");
+                                hideSoftInput();
                                 //刷新当前该页面
                                 refreshPage();
                             } else {

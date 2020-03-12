@@ -165,7 +165,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             public void done(String objectId, BmobException e) {
                 if (e == null) {
                     showMsg("注册成功");
-
                     setResult(RESULT_OK, intent);
                     finish();
                 } else {

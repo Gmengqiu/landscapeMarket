@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_head"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_height"
+        android:background="@color/main_color">
+
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:paddingLeft="15dp"
+            android:src="@mipmap/back2" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/item_height"
+            android:layout_centerInParent="true"
+            android:background="@color/main_color"
+            android:gravity="center"
+            android:text="帖子详情"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_big"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/shape_white"
+                android:orientation="vertical"
+                android:padding="15dp">
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/iv"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        tools:src="@mipmap/splash_jiangnanchun" />
+
+                    <TextView
+                        android:id="@+id/tvName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_toRightOf="@+id/iv"
+                        android:textColor="@color/black_text"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        tools:text="张三" />
+
+
+                    <TextView
+                        android:id="@+id/tv_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:textColor="@color/text_black"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        tools:text="2018-09-19 12:00" />
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/tvContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingMultiplier="1.2"
+                    android:textColor="@color/text_black"
+                    android:textSize="16sp"
+                    tools:text="描述：欢乐谷各种刺激玩耍  描述：欢乐谷各种刺激玩耍  描述：欢乐谷各种刺激玩耍  描述：欢乐谷各种刺激玩耍描述：欢乐谷各种刺激玩耍  描述：欢乐谷各种刺激玩耍  描述：欢乐谷各种刺激玩耍  描述：欢乐谷各种刺激玩耍描述：欢乐谷各种刺激玩耍  描述：欢乐谷各种刺激玩耍  描述：欢乐谷各种刺激玩耍  描述：欢乐谷各种刺激玩耍描述：欢乐谷各种刺激玩耍  描述：欢乐谷各种刺激玩耍  描述：欢乐谷各种刺激玩耍  描述：欢乐谷各种刺激玩耍描述：欢乐谷各种刺激玩耍  描述：欢乐谷各种刺激玩耍  描述：欢乐谷各种刺激玩耍  描述：欢乐谷各种刺激玩耍描述：欢乐谷各种刺激玩耍  描述：欢乐谷各种刺激玩耍  描述：欢乐谷各种刺激玩耍  描述：欢乐谷各种刺激玩耍描述：欢乐谷各种刺激玩耍  描述：欢乐谷各种刺激玩耍  描述：欢乐谷各种刺激玩耍  描述：欢乐谷各种刺激玩耍" />
+
+
+            </LinearLayout>
+
+
+            <com.jalen.mapapp.weight.MyListView
+                android:id="@+id/lv_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@color/white"
+                android:divider="@color/gray1"
+                android:dividerHeight="1px"
+                android:overScrollMode="never"
+                android:scrollbars="none" />
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentTop="true"
+            android:background="@color/gray3" />
+
+
+        <EditText
+            android:id="@+id/et_you_comment"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_toLeftOf="@+id/tv_add_comment"
+            android:background="@null"
+            android:hint="请在这里输入回帖内容"
+            android:maxLength="30"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp" />
+
+        <TextView
+            android:id="@+id/tv_add_comment"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="@color/main_color"
+            android:gravity="center"
+            android:text="回帖"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+
+    </RelativeLayout>
+
+
+</LinearLayout>

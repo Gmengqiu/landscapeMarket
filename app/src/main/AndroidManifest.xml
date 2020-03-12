@@ -42,6 +42,9 @@
         <activity
             android:name=".ui.LandmarkDetailsActivity"
             android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name=".ui.CommentDetailsActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
 
 
     </application>
