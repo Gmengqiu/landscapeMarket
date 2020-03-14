@@ -5,11 +5,14 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -18,9 +21,7 @@ import com.jalen.mapapp.adapter.CommentAdapter;
 import com.jalen.mapapp.base.BaseActivity;
 import com.jalen.mapapp.bean.CommentBean;
 import com.jalen.mapapp.bean.LandmarkBean;
-import com.jalen.mapapp.util.AppConstants;
 import com.jalen.mapapp.util.CommonUtil;
-import com.jalen.mapapp.util.SharedPreferencesUtils;
 import com.jalen.mapapp.weight.MyListView;
 
 import java.util.ArrayList;
@@ -29,8 +30,6 @@ import java.util.List;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.QueryListener;
-import cn.bmob.v3.listener.SaveListener;
-import cn.bmob.v3.listener.UpdateListener;
 
 /**
  * 风景或者餐厅列表
@@ -38,12 +37,13 @@ import cn.bmob.v3.listener.UpdateListener;
 public class LandmarkDetailsActivity extends BaseActivity implements View.OnClickListener {
 
     private ImageView ivBack, ivDetails;
-    private TextView tvTitle, tvIntroduce, tvAddComment;
+    private TextView tvTitle, tvIntroduce;
     private TextView tvAddress, tvTel;
     private MyListView lvComment;
-    private EditText etYouComment;
+    private RelativeLayout rlAdd;
     private CommentAdapter commentAdapter;
     private int position;
+    private ScrollView scrollView;
     private LandmarkBean landmarkBeanDetails;
 
 
@@ -56,9 +56,9 @@ public class LandmarkDetailsActivity extends BaseActivity implements View.OnClic
         tvIntroduce = findViewById(R.id.tv_introduce);
         tvAddress = findViewById(R.id.tv_address);
         tvTel = findViewById(R.id.tv_tel);
-        tvAddComment = findViewById(R.id.tv_add_comment);
+        rlAdd = findViewById(R.id.rlAdd);
         lvComment = findViewById(R.id.lv_comment);
-        etYouComment = findViewById(R.id.et_you_comment);
+        scrollView = findViewById(R.id.scrollView);
     }
 
     @Override
@@ -80,7 +80,7 @@ public class LandmarkDetailsActivity extends BaseActivity implements View.OnClic
                 if (e == null) {
                     landmarkBeanDetails = landmarkBean;
                     //绑定数据显示页面
-                    showPage(landmarkBean);
+                    showPage(landmarkBean, false);
                 } else {
                     showMsg("查询失败：" + e.getMessage());
                 }
@@ -93,7 +93,7 @@ public class LandmarkDetailsActivity extends BaseActivity implements View.OnClic
      *
      * @param landmarkBean
      */
-    private void showPage(final LandmarkBean landmarkBean) {
+    private void showPage(final LandmarkBean landmarkBean, boolean scrollToBottom) {
         tvTitle.setText(landmarkBean.title);
         Glide.with(context).load(landmarkBean.imgUrl).into(ivDetails);
         tvIntroduce.setText(landmarkBean.describe);
@@ -111,6 +111,15 @@ public class LandmarkDetailsActivity extends BaseActivity implements View.OnClic
                 }
             });
         }
+        //新增帖子回复后 手动跳转到最底部
+        if (scrollToBottom) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                }
+            }, 500);
+        }
     }
 
     private void go2CommentDetail(CommentBean commentBean) {
@@ -123,7 +132,7 @@ public class LandmarkDetailsActivity extends BaseActivity implements View.OnClic
     public void initEvent() {
         ivBack.setOnClickListener(this);
         tvAddress.setOnClickListener(this);//跳转百度翻地图
-        tvAddComment.setOnClickListener(this);//添加评论
+        rlAdd.setOnClickListener(this);//添加评论
     }
 
     @Override
@@ -135,8 +144,8 @@ public class LandmarkDetailsActivity extends BaseActivity implements View.OnClic
             case R.id.tv_address://跳转到地图
                 gotoMap();
                 break;
-            case R.id.tv_add_comment://添加评论
-                addComment();
+            case R.id.rlAdd://添加评论
+                AddCommentActivity.go2AddCommentActivity(this, landmarkBeanDetails);
                 break;
             default:
                 break;
@@ -183,58 +192,19 @@ public class LandmarkDetailsActivity extends BaseActivity implements View.OnClic
         return packageNames.contains(packageName);
     }
 
-
-    /**
-     * 添加评论
-     */
-    private void addComment() {
-        String userHead = SharedPreferencesUtils.getString(AppConstants.USER_HEAD);
-        String commentDetail = etYouComment.getText().toString().trim();
-        //获取当前用户
-        String commentator = CommonUtil.getCurrentUser();
-        CommentBean commentBean = new CommentBean();
-        commentBean.commentator = commentator;
-        commentBean.CommentDetail = commentDetail;
-        commentBean.headId = userHead;
-        List<CommentBean> commentBeanList = new ArrayList<>();
-        commentBeanList.add(commentBean);
-
-        List<CommentBean> commentBeanList1 = landmarkBeanDetails.commentBeanList;
-        if (commentBeanList1 == null) {
-            commentBeanList1 = new ArrayList<>();
-            landmarkBeanDetails.commentBeanList = commentBeanList1;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 106 && resultCode == RESULT_OK) {
+            //新增帖子后 自动滑动到最底部数据
+            refreshPage(true);
         }
-        commentBeanList1.addAll(commentBeanList);
-        //更新数据
-        commentBean.save(new SaveListener<String>() {
-            @Override
-            public void done(String objectId, BmobException e) {
-                if (e == null) {
-                    landmarkBeanDetails.update(landmarkBeanDetails.getObjectId(), new UpdateListener() {
-                        @Override
-                        public void done(BmobException e) {
-                            if (e == null) {
-                                showMsg("添加成功");
-                                etYouComment.setText("");
-                                hideSoftInput();
-                                //刷新当前该页面
-                                refreshPage();
-                            } else {
-                                showMsg("添加失败");
-                            }
-                        }
-                    });
-                } else {
-                    showMsg("添加失败");
-                }
-            }
-        });
     }
 
     /**
      * 刷新当前该页面
      */
-    private void refreshPage() {
+    private void refreshPage(final boolean scrollToBottom) {
         //ObjectId在不为空的情况下开始进行查询数据
         BmobQuery<LandmarkBean> bmobQuery = new BmobQuery<LandmarkBean>();
         bmobQuery.getObject(landmarkBeanDetails.getObjectId(), new QueryListener<LandmarkBean>() {
@@ -243,7 +213,7 @@ public class LandmarkDetailsActivity extends BaseActivity implements View.OnClic
                 if (e == null) {
                     landmarkBeanDetails = landmarkBean;
                     //绑定数据显示页面
-                    showPage(landmarkBean);
+                    showPage(landmarkBean, scrollToBottom);
                 } else {
                     showMsg("暂无数据：" + e.getMessage());
                 }

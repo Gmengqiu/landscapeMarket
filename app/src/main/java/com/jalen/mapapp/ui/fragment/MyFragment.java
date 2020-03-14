@@ -1,5 +1,6 @@
 package com.jalen.mapapp.ui.fragment;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.jalen.mapapp.R;
 import com.jalen.mapapp.base.BaseFragment;
 import com.jalen.mapapp.bean.UserBean;
+import com.jalen.mapapp.ui.EditInfoActivity;
 import com.jalen.mapapp.ui.LoginActivity;
 import com.jalen.mapapp.util.AppConstants;
 import com.jalen.mapapp.util.CommonUtil;
@@ -28,7 +30,7 @@ import cn.bmob.v3.listener.UpdateListener;
 public class MyFragment extends BaseFragment {
 
     private TextView tvName, tvPhone, tvAddress, tvExit, tvDelete;
-    private ImageView iv;
+    private ImageView iv, ivEdit;
 
     @Override
     public int getLayoutId() {
@@ -43,22 +45,13 @@ public class MyFragment extends BaseFragment {
         tvExit = view.findViewById(R.id.tvExit);
         tvDelete = view.findViewById(R.id.tvDelete);
         iv = view.findViewById(R.id.iv);
+        ivEdit = view.findViewById(R.id.ivEdit);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        String name = SharedPreferencesUtils.getString(AppConstants.USER_NAME);
-        String address = SharedPreferencesUtils.getString(AppConstants.USER_ADDRESS);
-        String phone = SharedPreferencesUtils.getString(AppConstants.USER_PHONE);
-        String userHead = SharedPreferencesUtils.getString(AppConstants.USER_HEAD);
-        if (!TextUtils.isEmpty(name)) {
-            tvName.setText(name);
-            tvAddress.setText(address);
-            tvPhone.setText(phone);
-            int mipmap = getResources().getIdentifier(userHead, "mipmap", getActivity().getPackageName());
-            iv.setImageResource(mipmap);
-        }
+        loadUserData();
         tvExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,6 +64,29 @@ public class MyFragment extends BaseFragment {
                 zhuxiao();
             }
         });
+        ivEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                editInfo();
+            }
+        });
+    }
+
+    /**
+     * 加载用户基础数据
+     */
+    private void loadUserData() {
+        String name = SharedPreferencesUtils.getString(AppConstants.USER_NAME);
+        String address = SharedPreferencesUtils.getString(AppConstants.USER_ADDRESS);
+        String phone = SharedPreferencesUtils.getString(AppConstants.USER_PHONE);
+        String userHead = SharedPreferencesUtils.getString(AppConstants.USER_HEAD);
+        if (!TextUtils.isEmpty(name)) {
+            tvName.setText(name);
+            tvAddress.setText(address);
+            tvPhone.setText(phone);
+            int mipmap = getResources().getIdentifier(userHead, "mipmap", getActivity().getPackageName());
+            iv.setImageResource(mipmap);
+        }
     }
 
     private void exit() {
@@ -131,4 +147,16 @@ public class MyFragment extends BaseFragment {
         });
     }
 
+    private void editInfo() {
+        Intent intent = new Intent(getContext(), EditInfoActivity.class);
+        startActivityForResult(intent, 106);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 106 && resultCode == Activity.RESULT_OK) {
+            loadUserData();
+        }
+    }
 }

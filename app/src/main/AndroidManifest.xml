@@ -45,6 +45,12 @@
         <activity
             android:name=".ui.CommentDetailsActivity"
             android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name=".ui.EditInfoActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name=".ui.AddCommentActivity"
+            android:windowSoftInputMode="adjustResize|stateAlwaysVisible" />
 
 
     </application>
