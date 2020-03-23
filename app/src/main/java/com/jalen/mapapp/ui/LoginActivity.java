@@ -108,7 +108,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             }
         }
         if (hasUser) {
-            if (userBeanResult.pwd.equals(pwd)) {
+            if (!userBeanResult.pwd.equals(pwd)) {
                 showMsg("请检查您的用户名和密码");
             } else {
                 showMsg("登录成功");
