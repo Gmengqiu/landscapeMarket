@@ -88,7 +88,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             @Override
             public void done(List<UserBean> categories, BmobException e) {
                 if (e == null && categories.size() > 0) {
-                    updateLoginUser(name, categories);
+                    updateLoginUser(name, pwd, categories);
                 } else {
                     showMsg("请检查您的用户名和密码");
                 }
@@ -96,7 +96,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         });
     }
 
-    private void updateLoginUser(String name, List<UserBean> categories) {
+    private void updateLoginUser(String name, String pwd, List<UserBean> categories) {
         boolean hasUser = false;
         UserBean userBeanResult = null;
         for (int i = 0; i < categories.size(); i++) {
@@ -108,10 +108,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             }
         }
         if (hasUser) {
-            showMsg("登录成功");
-            //保存在SP文件中
-            CommonUtil.login(userBeanResult);
-            go2Main();
+            if (userBeanResult.pwd.equals(pwd)) {
+                showMsg("请检查您的用户名和密码");
+            } else {
+                showMsg("登录成功");
+                //保存在SP文件中
+                CommonUtil.login(userBeanResult);
+                go2Main();
+            }
         } else {
             showMsg("暂无该用户记录");
         }
